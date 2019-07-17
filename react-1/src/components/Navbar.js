@@ -3,9 +3,9 @@ import PropTypes from 'prop-types'
 import logo from '../logo.svg';
 
 const Navbar = ({
-    searchString
+    searchString,
+    searchInputChangeHandler
 }) => {
-    {console.log(searchString)}
  return (
     <nav className="navbar fixed-top navbar-expand-sm navbar-dark bg-dark">
         <div className="navbar-brand col-1">
@@ -15,6 +15,7 @@ const Navbar = ({
         <div className="form-group justify-content-center row col-10 my-2">
             <input
                 value={searchString}
+                onChange={searchInputChangeHandler}
                 // TODO: onChange deve atualizar a URL 
                 className="form-control col-9 mr-2"
                 type="search"
