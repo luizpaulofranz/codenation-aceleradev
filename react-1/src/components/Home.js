@@ -6,10 +6,18 @@ const Home = ({
     recipes = [],
     searchString = ''
 }) => {
-    console.log(searchString)
+    
+const filtered = recipes.filter( recipe => {
+    if ( recipe.title.toLowerCase().includes(searchString) ||
+    recipe.ingredients.toLowerCase().includes(searchString)) {
+        return recipe;
+    }
+    return false;
+});
+      
 return (
     <div className="row">
-        { recipes.length > 0 ? recipes.map( (recipe, index) => (
+        { filtered.length > 0 ? filtered.map( (recipe, index) => (
         <RecipeItem key={index} recipe={recipe} term={searchString}  />
         ) ) :
         "No Results to Show!" }

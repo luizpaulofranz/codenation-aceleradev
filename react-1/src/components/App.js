@@ -41,7 +41,7 @@ class App extends Component {
         <div className="container mt-10">
           {/* TODO: Implementar rotas  */}
           <Route path="/" exact render={(props) => <Home {...props} searchString='' recipes={recipes.results} />} />
-          <Route path="/:searchString" exact render={() => <Home searchString={this.props.match.params.searchString} recipes={recipes.results} />} />
+          <Route path="/:searchString" render={() => <Home searchString={this.state.searchString} recipes={recipes.results} />} />
         </div>
       </div>
     )
