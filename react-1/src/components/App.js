@@ -4,8 +4,8 @@ import { withRouter } from 'react-router';
 import Navbar from './Navbar'
 import Home from './Home'
 import RecipePage from './RecipePage'
-import { slugify } from '../helpers'
 import recipes from '../sample_data/recipes.json'
+import { slugify } from '../helpers'
 
 class App extends Component {
 
@@ -24,7 +24,7 @@ class App extends Component {
 
   searchInputChangeHandler = ({ target }) => {
     this.setState({searchString: target.value}, () => {
-      this.props.history.push(this.state.searchString);
+      this.props.history.push(`/${this.state.searchString}`);
     });
   }
   
@@ -41,7 +41,8 @@ class App extends Component {
         <div className="container mt-10">
           {/* TODO: Implementar rotas  */}
           <Route path="/" exact render={(props) => <Home {...props} searchString='' recipes={recipes.results} />} />
-          <Route path="/:searchString" render={() => <Home searchString={this.state.searchString} recipes={recipes.results} />} />
+          <Route path="/:searchString" render={(props) => <Home {...props} searchString={this.state.searchString} recipes={recipes.results} />} />
+          <Route path={`/recipe/:slug`} render={(props) => <RecipePage {...props}  />} />
         </div>
       </div>
     )
