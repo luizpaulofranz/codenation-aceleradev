@@ -16,21 +16,15 @@ class App extends Component {
   handleSearch = (e) => {
     e.preventDefault();
     const searchString = e.target.value;
-    this.setState( {searchString: searchString.toLowerCase()});
+    this.setState( {searchString: searchString});
   }
 
   filteredRecipes = (searchString = '') => {
-    return this.recipes.filter( recipe => {
-      if ( recipe.title.toLowerCase().includes(searchString) ||
-        recipe.ingredients.toLowerCase().includes(searchString)) {
-          return recipe;
-      }
-      return false;
-    });
+    return this.recipes.filter( recipe => recipe.title.toLowerCase().includes(searchString) || recipe.ingredients.toLowerCase().includes(searchString));
   }
 
   render() { 
-    const results = this.filteredRecipes(this.state.searchString);
+    const results = this.filteredRecipes(this.state.searchString.toLowerCase());
 
     return (
       <div className="App">
@@ -38,7 +32,7 @@ class App extends Component {
         <div className="container mt-10">
           <div className="row">
             { results.length > 0 ? results.map( (recipe, index) => (
-              <RecipeItem key={index} recipe={recipe} term={this.state.searchString}  />
+              <RecipeItem key={index} recipe={recipe} term={this.state.searchString.toLocaleLowerCase()}  />
             ) ) :
             "No Results to Show!" }
           </div>
