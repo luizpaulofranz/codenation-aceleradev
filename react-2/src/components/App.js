@@ -5,8 +5,10 @@ import Home from './Home'
 import RecipePage from './RecipePage'
 import Login from './Login'
 import User from './User'
+
 import { slugify } from '../helpers'
 import recipes from '../sample_data/recipes.json'
+import { isLogged } from '../services/loginService'
 
 const HomeRoute = ({ match }) => (
   <Home
@@ -22,6 +24,7 @@ const RecipePageRoute = () => (
 
 class App extends Component {
   render() {
+    
     return (
       <div className="App">
         <Navbar
@@ -30,8 +33,8 @@ class App extends Component {
     
         <div className="container mt-10">
           <Route path="/recipe/recipe" component={RecipePageRoute}/>
-          <Route path="/user/login" component={LoginRoute}/>
-          <Route path="/user/profile" component={ProfileRoute}/>
+          { !isLogged() && (<Route path="/user/login" component={LoginRoute}/>) }
+          { isLogged() && (<Route path="/user/profile" component={ProfileRoute}/>) }
           <Route exact path="/" component={HomeRoute}/>
         </div>
       </div>

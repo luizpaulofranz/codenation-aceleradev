@@ -1,7 +1,15 @@
 import React from 'react'
+import { withRouter } from 'react-router-dom'
+import { logout } from '../services/loginService'
 
-const User = () => (
-    <button className="btn">Logout</button>
+const logoutHandler = (e, props) => {
+    e.preventDefault();
+    logout()
+    props.history.push('/')
+}
+
+const User = ( props ) => (
+    <button onClick={(e) => logoutHandler(e, props)} className="btn">Logout</button>
 )
 
-export default User
+export default withRouter(User)

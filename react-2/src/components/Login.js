@@ -1,11 +1,51 @@
 import React, { Component } from 'react'
+import { login, register } from '../services/loginService'
+import { withRouter } from 'react-router-dom'
 
 class Login extends Component {
     constructor(props) {
         super(props)
+        this.state = {
+            username: '',
+            password: ''
+        }
     }
 
-    render = () => (
+    usernameInputHandler = e => {
+        this.setState({username:e.target.value});
+    }
+
+    passwordInputHandler = e => {
+        this.setState({password:e.target.value});
+    }
+
+    doLogin = e => {
+        e.preventDefault()
+        try {
+            login(this.state);
+            this.setState({username:'',password:''})
+            this.props.history.push('/');
+        } catch(e) {
+            console.log(e);
+            alert(e);
+        }
+    }
+
+    registerUser = e => {
+        e.preventDefault()
+        try {
+            register(this.state);
+            this.setState({username:'',password:''})
+            this.props.history.push('/');
+        } catch (e) {
+            console.log(e);
+            alert(e);
+            this.setState({username:'',password:''})
+        }
+    }
+
+    render = () => {
+        return (
         <form className="form-signin">
             <div className="text-center mb-4">
                 <h1 className="h3 mb-3 font-weight-normal">Login / Register</h1>
@@ -15,8 +55,8 @@ class Login extends Component {
                 <label htmlFor="inputEmail">Username</label>
                 <input
                     name="username"
-                    onChange={() => {}}
-                    value={''}
+                    onChange={this.usernameInputHandler}
+                    value={this.state.username}
                     className="form-control"
                     placeholder="Username"
                     required
@@ -27,8 +67,8 @@ class Login extends Component {
                 <label htmlFor="inputPassword">Password</label>
                 <input
                     name="password"
-                    onChange={() => {}}
-                    value={''}
+                    onChange={this.passwordInputHandler}
+                    value={this.state.password}
                     type="password"
                     className="form-control"
                     placeholder="Password"
@@ -37,11 +77,11 @@ class Login extends Component {
             </div>
     
             <div className="mt-5">
-                <button className="login btn btn-lg btn-primary btn-block" type="submit">Login</button>
-                <button className="register btn btn-lg btn-secondary btn-block" type="submit">Register</button>
+                <button onClick={this.doLogin} className="login btn btn-lg btn-primary btn-block" type="submit">Login</button>
+                <button onClick={this.registerUser} className="register btn btn-lg btn-secondary btn-block" type="submit">Register</button>
             </div>
         </form>
-    )
+    )}
 }
 
-export default Login
+export default withRouter(Login)
