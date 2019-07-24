@@ -38,7 +38,10 @@ const RecipeItem = ({recipe, term}) => {
 return (
     <div className="RecipeItem col-sm-3 mt-4">
         <div className="card">
-        {/*<Link to={{pathname:`/recipe/${slugify(recipe.title)}`, state: {recipe}}}>*/}
+        {/*
+        that's how we set state to a route
+        <Link to={{pathname:`/recipe/${slugify(recipe.title)}`, state: {recipe}}}>
+        */}
         <Link to={`/recipe/${slugify(recipe.title)}`}>
             <img className="card-img-top img-fluid" src={recipe.thumbnail} alt={recipe.title} />
             <div className="card-body">

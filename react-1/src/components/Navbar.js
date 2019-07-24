@@ -7,6 +7,7 @@ const Navbar = ({
     searchString,
     ...props
 }) => {
+    console.log(searchString)
  return (
     <nav className="navbar fixed-top navbar-expand-sm navbar-dark bg-dark">
         <div className="navbar-brand col-1">
