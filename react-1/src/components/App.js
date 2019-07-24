@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react'
+import React, { Component } from 'react'
 import { Route, Switch } from 'react-router-dom';
 import Navbar from './Navbar'
 import Home from './Home'
@@ -9,28 +9,21 @@ import { slugify } from '../helpers'
 
 class App extends Component {
   
-  findRecipe = (recipe) => {
-    return recipes.results.find( rp => slugify(rp.title) === recipe.slice(7).toLowerCase()) || null;
+  findRecipe = (recipeSlug) => {
+    return recipes.results.find( recipe => slugify(recipe.title) === recipeSlug) || null;
   }
   
   render() {
-
-    const pathName = this.props.location.pathname.slice(1);
-    const searchString = pathName.indexOf('recipe') > -1 ? "" : pathName;
-
     return (
-      <div className="App">
-          {/* TODO: Navbar precisa receber a string da URL */}
-        
-    
+      <div className="App">    
+        <Navbar
+              searchString={this.props.match.params.searchString}
+        />
         <div className="container mt-10">
-          <Navbar
-              searchString={searchString}
-          />
           <Switch>
-            <Route path={`/recipe/:slug`} exact render={(props) => <RecipePage recipe={this.findRecipe(pathName)}  />} />
+            <Route path={`/recipe/:slug`} exact render={(props) => <RecipePage recipe={this.findRecipe(props.match.params.slug)}  />} />
             {/*<Route path={`/recipe/:slug`} exact render={(props) => <RecipePage {...props.location.state}  />} />*/}
-            <Route path="/:searchString?" render={(props)=><Home {...props} searchString={searchString} recipes={recipes.results} />} />
+            <Route path="/:searchString?" render={(props)=><Home {...props} searchString={props.match.params.searchString} recipes={recipes.results} />} />
           </Switch>
         </div>
       </div>

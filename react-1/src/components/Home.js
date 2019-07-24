@@ -6,13 +6,16 @@ const Home = ({
     recipes = [],
     searchString = ''
 }) => {
-    
-const filtered = recipes.filter( recipe => recipe.title.toLowerCase().includes(searchString.toLocaleLowerCase()) || recipe.ingredients.toLowerCase().includes(searchString.toLocaleLowerCase()));
-      
+
+const filtered = recipes.filter( recipe => 
+    recipe.title.toLowerCase().includes(searchString.toLocaleLowerCase()) || 
+    recipe.ingredients.toLowerCase().includes(searchString.toLocaleLowerCase())
+);
+
 return (
     <div className="row">
         { filtered.length > 0 ? filtered.map( (recipe, index) => (
-        <RecipeItem key={index} recipe={recipe} term={searchString.toLocaleLowerCase()}  />
+        <RecipeItem key={index} recipe={recipe} term={searchString.toLowerCase()}  />
         ) ) :
         "No Results to Show!" }
     </div>

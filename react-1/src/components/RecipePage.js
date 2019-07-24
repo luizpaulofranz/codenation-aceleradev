@@ -6,13 +6,13 @@ const RecipePage = ({
     recipe
 }) => {
 return(
-    recipe == null ? "recipe not found " :  
+    recipe == null ? <p>"recipe not found "</p> :  
     <div>
         <img className="card-img-top img-fluid" src={recipe.thumbnail} alt={recipe.title}/>
         <div className="card-body">
             <h5 className="card-title">{recipe.title}</h5>
             <p className="card-text">
-                <strong>Ingredients: </strong>recipe.ingredients
+                <strong>Ingredients: </strong>{recipe.ingredients}
             </p>
         </div>
     </div>
