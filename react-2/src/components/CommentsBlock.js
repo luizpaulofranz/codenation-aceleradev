@@ -1,24 +1,58 @@
 import React, { Component } from 'react';
+import { isLogged, getUser } from '../services/loginService'
+import commentsService from '../services/commentsService'
+import { slugify } from '../helpers';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 class CommentsBlock extends Component {
+
     constructor(props) {
         super(props)
 
+        this.slug = slugify(props.recipe.title);
+
         this.state = {
-            comments: []
+            comments: [],
+            comment: ''
         }
     }
 
-    renderComment = () => (
-        <div className="Comment media text-muted pt-3">
+    componentDidMount() {
+        const comments = commentsService.get(this.slug);
+        this.setState({comments})
+    }
+
+    commentInputHandler = (e) => {
+        e.preventDefault();
+        this.setState({comment: e.target.value});
+    }
+
+    saveComment = (e) => {
+        e.preventDefault();
+        if (commentsService.insert(this.slug, {comment: this.state.comment})) {
+            const comments = commentsService.get(this.slug);
+            this.setState({comments, comment: ''})
+        }
+    }
+
+    removeComment = (e, comment) => {
+        e.preventDefault();
+        if (commentsService.delete(this.slug, comment)) {
+            const comments = commentsService.get(this.slug);
+            this.setState({comments})
+        }
+    }
+
+    renderComment = (comment, index) => (
+        <div key={index} className="Comment media text-muted pt-3">
             <FontAwesomeIcon className="mr-2" size="3x" icon="user-circle"/>
             <p className="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
-                <strong className="d-block text-gray-dark">@user</strong>
-                Comment
+                <strong className="d-block text-gray-dark">@{comment.author}</strong>
+                {comment.comment}
             </p>
-            {/* Icone deve aparecer somente quando o comentario for do usuario logado */}
-            <FontAwesomeIcon icon="trash"/>
+            {isLogged() && getUser().username === comment.author ? 
+                <FontAwesomeIcon onClick={(e) => this.removeComment(e, comment)} icon="trash"/>
+            : null}
         </div>
     )
 
@@ -29,9 +63,7 @@ class CommentsBlock extends Component {
                     <h6 className="border-bottom border-gray pb-2 mb-0">
                         Comments
                     </h6>
-                    {this.renderComment()}
-                    {this.renderComment()}
-                    {this.renderComment()}
+                    {this.state.comments.map( (comment, index) => this.renderComment(comment, index) )}
                 </div>
                 <form>
                     <div className="form-group">
@@ -39,9 +71,9 @@ class CommentsBlock extends Component {
                             Comment
                         </label>
                         <textarea
-                            disabled={false}
-                            value={''}
-                            onChange={() => {}}
+                            disabled={!isLogged()}
+                            value={this.state.comment}
+                            onChange={this.commentInputHandler}
                             required="required"
                             className="form-control"
                             id="exampleInputEmail1"
@@ -49,9 +81,10 @@ class CommentsBlock extends Component {
                         />
                     </div>
                     <button
-                        disabled={false}
+                        disabled={!isLogged()}
                         type="submit"
                         className="btn btn-primary"
+                        onClick={this.saveComment}
                     >
                         Submit
                     </button>

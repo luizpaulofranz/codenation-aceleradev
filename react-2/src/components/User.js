@@ -1,6 +1,6 @@
 import React from 'react'
 import { withRouter } from 'react-router-dom'
-import { logout } from '../services/loginService'
+import { logout, isLogged } from '../services/loginService'
 
 const logoutHandler = (e, props) => {
     e.preventDefault();
@@ -8,8 +8,12 @@ const logoutHandler = (e, props) => {
     props.history.push('/')
 }
 
-const User = ( props ) => (
+const User = ( props ) => {
+    if(!isLogged()) {
+        props.history.push('/')
+    }
+return (
     <button onClick={(e) => logoutHandler(e, props)} className="btn">Logout</button>
-)
+)}
 
 export default withRouter(User)

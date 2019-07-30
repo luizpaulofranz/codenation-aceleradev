@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { login, register } from '../services/loginService'
+import { login, register, isLogged } from '../services/loginService'
 import { withRouter } from 'react-router-dom'
 
 class Login extends Component {
@@ -11,6 +11,12 @@ class Login extends Component {
         }
     }
 
+    componentWillMount() {
+        if(isLogged()) {
+          this.props.history.push('/')
+        }
+      }
+
     usernameInputHandler = e => {
         this.setState({username:e.target.value});
     }
@@ -19,9 +25,10 @@ class Login extends Component {
         this.setState({password:e.target.value});
     }
 
-    doLogin = e => {
-        e.preventDefault()
+    doLogin = (e) => {
+        if(e) {e.preventDefault();}
         try {
+            console.log(this.state)
             login(this.state);
             this.setState({username:'',password:''})
             this.props.history.push('/');
@@ -31,10 +38,10 @@ class Login extends Component {
         }
     }
 
-    registerUser = e => {
-        e.preventDefault()
+    registerUser = () => {
         try {
             register(this.state);
+            this.doLogin();
             this.setState({username:'',password:''})
             this.props.history.push('/');
         } catch (e) {

@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
-import { Route } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
+import { withRouter } from 'react-router';
 import Navbar from './Navbar'
 import Home from './Home'
 import RecipePage from './RecipePage'
@@ -12,34 +13,37 @@ import { isLogged } from '../services/loginService'
 
 const HomeRoute = ({ match }) => (
   <Home
-    recipes={[]}
+    recipes={recipes.results}
     searchString=""
   />
 )
 const LoginRoute = () => <Login />
 const ProfileRoute = () => <User />
-const RecipePageRoute = () => (
-  <RecipePage recipes={recipes[0]}/>
-)
 
 class App extends Component {
+
+  findRecipe = (recipeSlug) => {
+    return recipes.results.find( recipe => slugify(recipe.title) === recipeSlug) || null;
+  }
+
   render() {
-    
+
     return (
       <div className="App">
-        <Navbar
-          searchString=""
-        />
+        <Route path="/:searchString?" exact children={(props) => <Navbar {...props} searchString={(props.match) ? props.match.params.searchString : ""} />}/>
     
         <div className="container mt-10">
-          <Route path="/recipe/recipe" component={RecipePageRoute}/>
-          { !isLogged() && (<Route path="/user/login" component={LoginRoute}/>) }
-          { isLogged() && (<Route path="/user/profile" component={ProfileRoute}/>) }
+          <Route path="/user/login" component={LoginRoute}/>
+          <Route path="/user/profile" exact component={ProfileRoute}/>
           <Route exact path="/" component={HomeRoute}/>
+          <Switch>
+            <Route path={`/recipe/:slug`} exact render={ props => <RecipePage recipe={this.findRecipe(props.match.params.slug)}  />} />
+            <Route path="/:searchString?" exact render={ props => <Home {...props} searchString={props.match.params.searchString} recipes={recipes.results} />} />
+          </Switch>
         </div>
       </div>
     )
   }
 }
 
-export default App
+export default withRouter(App)
