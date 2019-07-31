@@ -6,7 +6,7 @@ const RecipePage = ({
     recipe
 }) => {
     return(
-    recipe == null ? <p>"recipe not found "</p> :  
+    !recipe ? <p>Recipe not found</p> :  
     <div>
         <img className="img-fluid" src={recipe.thumbnail} alt={recipe.title}/>
         <div className="card-body">

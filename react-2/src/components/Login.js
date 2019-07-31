@@ -11,12 +11,6 @@ class Login extends Component {
         }
     }
 
-    componentWillMount() {
-        if(isLogged()) {
-          this.props.history.push('/')
-        }
-      }
-
     usernameInputHandler = e => {
         this.setState({username:e.target.value});
     }
@@ -28,24 +22,19 @@ class Login extends Component {
     doLogin = (e) => {
         if(e) {e.preventDefault();}
         try {
-            console.log(this.state)
-            login(this.state);
-            this.setState({username:'',password:''})
+            login({ username: this.state.username, password: this.state.password });
             this.props.history.push('/');
         } catch(e) {
-            console.log(e);
             alert(e);
         }
     }
 
     registerUser = () => {
         try {
-            register(this.state);
+            //register(this.state);
+            register({ username: this.state.username, password: this.state.password });
             this.doLogin();
-            this.setState({username:'',password:''})
-            this.props.history.push('/');
         } catch (e) {
-            console.log(e);
             alert(e);
             this.setState({username:'',password:''})
         }

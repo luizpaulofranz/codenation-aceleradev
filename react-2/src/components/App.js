@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Route, Switch } from 'react-router-dom';
+import { Route, Switch, Redirect } from 'react-router-dom';
 import { withRouter } from 'react-router';
 import Navbar from './Navbar'
 import Home from './Home'
@@ -17,8 +17,8 @@ const HomeRoute = ({ match }) => (
     searchString=""
   />
 )
-const LoginRoute = () => <Login />
-const ProfileRoute = () => <User />
+const LoginRoute = () => isLogged() ? <Redirect to="/" /> : <Login />
+const ProfileRoute = () => !isLogged() ? <Redirect to="/" /> : <User />
 
 class App extends Component {
 
